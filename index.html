@@ -1,118 +1,83 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="chrome=1">
-	<title>jsubmitform</title>
-	<link rel="stylesheet" href="/jsubmitform.css">
-	<script src="/jquery-1.11.0.min.js"></script>
-	<script src="/jsubmitform.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-<form class="jsubmitform" role="form" action='respond.php' method="post" enctype="multipart/form-data">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-	<table width="100%">
-		<tr>
-			<td>
-				<p>
-					<b>Строка:</b><br>
-					<input type="text" name="text" jsf_necessary="Введите строку"/>
-				</p>
+    <title>Jquery-form-submit by ajikcey</title>
+  </head>
 
-				<p>
-					<b>Radio:</b><Br/>
-					<input id="radio0" type="radio" name="radio" value="0" jsf_necessary="Выберите radio"/>
-					<label for="radio0">Radio 0</label><Br/>
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Jquery-form-submit</h1>
+        <h2>Form Submit widget on base ajax</h2>
+        <a href="https://github.com/ajikcey/jQuery-Form-Submit" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-					<input id="radio1" type="radio" name="radio" value="1" jsf_necessary="Выберите radio"/>
-					<label for="radio1">Radio 1</label><Br/>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-					<input id="radio2" type="radio" name="radio" value="2" jsf_necessary="Выберите radio"/>
-					<label for="radio2">Radio 2</label><Br/>
-				</p>
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
-				<p>
-					<b>Текст:</b><Br/>
-					<textarea name="textarea" jsf_necessary="Введите текст"></textarea>
-				</p>
-			</td>
-			<td>
-				<p>
-					<b>Select:</b><Br/>
-					<select name="select" jsf_necessary="Выберите select">
-						<option value="">Выберите select</option>
-						<option value="0">Select 0</option>
-						<option value="1">Select 1</option>
-						<option value="2">Select 2</option>
-						<option value="3">Select 3</option>
-					</select>
-				</p>
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
 
-				<p>
-					<b>Multiple_select:</b><Br/>
-					<select name="multiple_select[]" jsf_necessary="Выберите multiple_select" multiple>
-						<option value="0">Multiple_select 0</option>
-						<option value="1">Multiple_select 1</option>
-						<option value="2">Multiple_select 2</option>
-						<option value="3">Multiple_select 3</option>
-					</select>
-				</p>
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-				<p>
-					<b>Checkbox</b><br>
-					<input id="checkbox0" type="checkbox" name="checkbox[]" value="0" jsf_necessary="Выберите checkboxs"/>
-					<label for="checkbox0">Checkbox 0</label><Br/>
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
 
-					<input id="checkbox1" type="checkbox" name="checkbox[]" value="1" jsf_necessary="Выберите checkboxs"/>
-					<label for="checkbox1">Checkbox 1</label><Br/>
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
 
-					<input id="checkbox2" type="checkbox" name="checkbox[]" value="2" jsf_necessary="Выберите checkboxs"/>
-					<label for="checkbox2">Checkbox 2</label><Br/>
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
 
-					<input id="checkbox3" type="checkbox" name="checkbox[]" value="3" jsf_necessary="Выберите checkboxs"/>
-					<label for="checkbox3">Checkbox 3</label><Br/>
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
 
-					<input id="checkbox4" type="checkbox" name="checkbox[]" value="4" jsf_necessary="Выберите checkboxs"/>
-					<label for="checkbox4">Checkbox 4</label><Br/>
-				</p>
-			</td>
-		</tr>
-	</table>
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-	<input type="submit" value="Сохранить"/>
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
 
-	<span id="jsf_error"></span>
-</form>
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<script>
-	jsubmitform($('.jsubmitform'), {
-		debug: true,
-		handle: true,
-		auto: true,
-		success: function (obj) {
-			console.log(obj);
-		},
-		noresponse: function (obj) {
-			console.log(obj);
-		},
-		before: function (obj) {
-			console.log(obj);
-		},
-		after: function (obj) {
-			console.log(obj);
-		},
-		incorrect_data: function (obj) {
-			console.log(obj);
-		},
-		correct_data: function (obj) {
-			console.log(obj);
-		},
-		error_data: function (obj) {
-			console.log(obj);
-		}
-	});
-</script>
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+        </section>
 
-</body>
+        <aside id="sidebar">
+          <a href="https://github.com/ajikcey/jQuery-Form-Submit/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/ajikcey/jQuery-Form-Submit/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/ajikcey/jQuery-Form-Submit"></a> is maintained by <a href="https://github.com/ajikcey">ajikcey</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
 </html>
