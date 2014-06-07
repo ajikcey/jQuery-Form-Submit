@@ -4,9 +4,9 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<title>jsubmitform</title>
-	<link rel="stylesheet" href="jsubmitform.css">
-	<script src="jquery-1.11.0.min.js"></script>
-	<script src="jsubmitform.js"></script>
+	<link rel="stylesheet" href="/jsubmitform.css">
+	<script src="/jquery-1.11.0.min.js"></script>
+	<script src="/jsubmitform.js"></script>
 </head>
 <body>
 
@@ -34,7 +34,7 @@
 
 				<p>
 					<b>Текст:</b><Br/>
-					<textarea name="textarea" jsf_necessary="Введите текст"></textarea>
+					<textarea name="textarea"><!--jsf_necessary="Введите текст"--></textarea>
 				</p>
 			</td>
 			<td>
@@ -90,27 +90,67 @@
 		debug: true,
 		handle: true,
 		auto: true,
+		validate: [
+			{
+				field: "text",
+				required: true,
+				msg: "Text должен быть минимум 4 символа",
+				minlength: 4,
+			},
+			{
+				field: "text",
+				required: true,
+				msg: "Text должен быть максимум 8 символа",
+				maxlength: 8,
+			},
+			{
+				field: "textarea",
+				required: true,
+				msg: "Textarea должен быть",
+			}
+		],
 		success: function (obj) {
-			console.log(obj);
+			//console.log('success');
+			//console.log(obj);
 		},
 		noresponse: function (obj) {
-			console.log(obj);
+			//console.log('noresponse');
+			//console.log(obj);
 		},
 		before: function (obj) {
-			console.log(obj);
+			//console.log('before');
+			//console.log(obj);
+			if (obj.dataout.text == '123') {
+				alert('not 123');
+				return false;
+			}
 		},
 		after: function (obj) {
-			console.log(obj);
+			//console.log('after');
+			//console.log(obj);
 		},
 		incorrect_data: function (obj) {
-			console.log(obj);
+			//console.log('incorrect_data');
+			//console.log(obj);
 		},
 		correct_data: function (obj) {
-			console.log(obj);
+			//console.log('correct_data');
+			//console.log(obj);
 		},
 		error_data: function (obj) {
-			console.log(obj);
-		}
+			//console.log('error_data');
+			//console.log(obj);
+		},
+		success_field: function (obj) {
+			//console.log('success_field');
+			//console.log(obj);
+			obj.field.css('color', 'green');
+		},
+		error_field: function (obj) {
+			//console.log('error_field');
+			//console.log(obj);
+			obj.field.css('color', 'red');
+		},
 	});
 </script>
 
