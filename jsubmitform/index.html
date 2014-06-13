@@ -17,7 +17,7 @@
 			<td>
 				<p>
 					<b>Строка:</b><br>
-					<input type="text" name="text" jsf_necessary="Введите строку"/>
+					<input type="text" name="text"/>
 				</p>
 
 				<p>
@@ -34,7 +34,7 @@
 
 				<p>
 					<b>Текст:</b><Br/>
-					<textarea name="textarea"><!--jsf_necessary="Введите текст"--></textarea>
+					<textarea name="textarea"></textarea>
 				</p>
 			</td>
 			<td>
@@ -61,19 +61,19 @@
 
 				<p>
 					<b>Checkbox</b><br>
-					<input id="checkbox0" type="checkbox" name="checkbox[]" value="0" jsf_necessary="Выберите checkboxs"/>
+					<input id="checkbox0" type="checkbox" name="checkbox[]" value="0"/>
 					<label for="checkbox0">Checkbox 0</label><Br/>
 
-					<input id="checkbox1" type="checkbox" name="checkbox[]" value="1" jsf_necessary="Выберите checkboxs"/>
+					<input id="checkbox1" type="checkbox" name="checkbox[]" value="1"/>
 					<label for="checkbox1">Checkbox 1</label><Br/>
 
-					<input id="checkbox2" type="checkbox" name="checkbox[]" value="2" jsf_necessary="Выберите checkboxs"/>
+					<input id="checkbox2" type="checkbox" name="checkbox[]" value="2"/>
 					<label for="checkbox2">Checkbox 2</label><Br/>
 
-					<input id="checkbox3" type="checkbox" name="checkbox[]" value="3" jsf_necessary="Выберите checkboxs"/>
+					<input id="checkbox3" type="checkbox" name="checkbox[]" value="3"/>
 					<label for="checkbox3">Checkbox 3</label><Br/>
 
-					<input id="checkbox4" type="checkbox" name="checkbox[]" value="4" jsf_necessary="Выберите checkboxs"/>
+					<input id="checkbox4" type="checkbox" name="checkbox[]" value="4"/>
 					<label for="checkbox4">Checkbox 4</label><Br/>
 				</p>
 			</td>
@@ -83,32 +83,32 @@
 	<input type="submit" value="Сохранить"/>
 
 	<span id="jsf_error"></span>
+	<span id="jsf_luck"></span>
 </form>
 
 <script>
 	jsubmitform($('.jsubmitform'), {
-		debug: true,
 		handle: true,
 		auto: true,
-		validate: [
-			{
-				field: "text",
-				required: true,
-				msg: "Text должен быть минимум 4 символа",
-				minlength: 4,
-			},
-			{
-				field: "text",
-				required: true,
-				msg: "Text должен быть максимум 8 символа",
-				maxlength: 8,
-			},
-			{
-				field: "textarea",
-				required: true,
-				msg: "Textarea должен быть",
-			}
-		],
+		validate: {
+			text: [
+				{
+					name: 'minlength',
+					arg: 1,
+					msg: "Введите Text"
+				},
+				{
+					name: 'minlength',
+					arg: 4,
+					msg: "Text должен быть минимум 4 символа"
+				},
+				{
+					name: 'maxlength',
+					arg: 8,
+					msg: "Text должен быть максимум 8 символа"
+				},
+			]
+		},
 		success: function (obj) {
 			//console.log('success');
 			//console.log(obj);
@@ -118,12 +118,12 @@
 			//console.log(obj);
 		},
 		before: function (obj) {
-			//console.log('before');
-			//console.log(obj);
-			if (obj.dataout.text == '123') {
-				alert('not 123');
-				return false;
-			}
+//			console.log('before');
+//			console.log(obj);
+//			if (obj.dataout['checkbox[]'].indexOf("1") != -1) {
+//				alert('not 123');
+//				return false;
+//			}
 		},
 		after: function (obj) {
 			//console.log('after');
@@ -144,12 +144,12 @@
 		success_field: function (obj) {
 			//console.log('success_field');
 			//console.log(obj);
-			obj.field.css('color', 'green');
+			obj.field.css('background', 'green');
 		},
 		error_field: function (obj) {
 			//console.log('error_field');
 			//console.log(obj);
-			obj.field.css('color', 'red');
+			obj.field.css('background', 'red');
 		},
 	});
 </script>

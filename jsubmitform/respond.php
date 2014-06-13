@@ -1,3 +1,3 @@
 <?php
 
-echo json_encode(array('field' => 'text', 'error' => "not true"));
+echo json_encode(array('success' => true, 'field' => 'text', 'error' => "not true"));

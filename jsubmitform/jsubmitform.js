@@ -1,15 +1,13 @@
 /*
  Parameters:
- error           - show error info (default = true)
- luck            - show success info (default = true)
- animate         - show loading animate (default = true)
+ error           - show error info (default = true) (if not find #jsf_error in form then alert())
+ luck            - show success info (default = true) (if not find #jsf_luck in form then alert())
  handle          - handle request (default = false)
  auto            - automatic sending request when the field changes (default = false)
- validate        - array objects: "field", "required", "msg", "<name function>" (order is not important)
+ validate        - objects: "field": "array functions"
 
  Functions:
  before({ form, dataout });                 - if return "false" execution stops
- noresponse({ form, dataout });             - no answer from server
  after({ form, dataout });
  success({ form, dataout, datain });
  success_field({ form, dataout, field });
@@ -19,12 +17,10 @@
  incorrect_data({ form, dataout, datain });   - if JSON answer not consist "success" or "success == false"
  -                                              if JSON answer consist "field" and no "success", call "error_field"
  correct_data({ form, dataout, datain });
- error_data({ form, dataout, datain });
 
  Elements:
  #jsf_error      - element for error info (alert() if there is no)
  #jsf_luck       - element for success info (alert() if there is no)
- #jsf_animate    - element for loading animate
 
  Attributes:
  jsf_necessary   - required fields and value
@@ -55,10 +51,10 @@ function jsubmitform(forms, params) {
 
         // !!!!!!! MAIN HANDLE !!!!!!!
         function jsf_main_handle() {
-            if (params.error) {
+            if (params.error && form.find('#jsf_error')) {
                 hideel(form.find('#jsf_error'));
             }
-            if (params.luck) {
+            if (params.luck && form.find('#jsf_luck')) {
                 hideel(form.find('#jsf_luck'));
             }
 
@@ -73,19 +69,16 @@ function jsubmitform(forms, params) {
 
             // *befor desabled form necessary save data,
             // because no access to data of disabled elements
-            // var serialize = form.serialize();
+            var serialize = form.serialize();
 
             // desabled form
             form.find('*').prop("disabled", true);
-
-            // show animate
-            showani();
 
             // ajax
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),
-                data: obj2str(dataout), //serialize,
+                data: serialize,
                 success: function (data) {
 
                     if (params.handle) {
@@ -101,10 +94,8 @@ function jsubmitform(forms, params) {
                 },
                 error: function () {
                     // debug
-                    console.log('debug - error');
-
-                    // noresponse
-                    callf(params.noresponse, {form: form, dataout: dataout});
+                    // console.log('jsubmitform - no response from server');
+                    showerr(form.find('#jsf_error'), 'no response from server');
                 }
             }).always(function () {
                 // after
@@ -112,12 +103,81 @@ function jsubmitform(forms, params) {
 
                 // enbled form
                 form.find('*').prop("disabled", false);
-
-                // hide animate
-                hideel(form.find('#jsf_animate'));
             });
 
             return false;
+        }
+
+
+        // necessary fields
+        function necessary(dataout) {
+
+            var err_b = false;
+            form.find('[jsf_necessary]').each(function () {
+
+                // if not filled in the required fields, or not valid
+                if (!dataout[$(this).prop('name')]) {
+
+                    // error
+                    showerr(form.find('#jsf_error'), $(this).attr("jsf_necessary"));
+
+                    callf(params.error_field, {form: form, dataout: dataout, field: $(this)});
+
+                    err_b = true;
+                    return false;
+                }
+
+                callf(params.success_field, {form: form, dataout: dataout, field: $(this)});
+            });
+            if (err_b) return false;
+        }
+
+
+        // validate fields
+        function validate(dataout) {
+            var err_b = false;
+
+            if (typeof(params.validate) === 'object') {
+                /*
+                 value - object: field: <functions>
+                 */
+                $.each(params.validate, function (index, value) {
+                    if (typeof(value) === 'object') {
+
+                        /*
+                         f_value - object: name(function), arg, msg
+                         */
+                        $.each(value, function (f_index, f_value) {
+                            if (typeof(f_value) === 'object') {
+
+                                // call validation function
+                                if (valid_actions[f_value.name]({
+                                    value: dataout[index], test: f_value.arg
+                                }) === false) {
+
+                                    // error
+                                    showerr(form.find('#jsf_error'), f_value.msg);
+
+                                    callf(params.error_field, {
+                                        form: form,
+                                        dataout: dataout,
+                                        field: form.find('[name="' + index + '"]')
+                                    });
+
+                                    err_b = true;
+                                    return false;
+                                }
+                            }
+                        });
+                        if (err_b) return false;
+
+                        callf(params.success_field, {
+                            form: form, dataout: dataout, field: form.find('[name="' + index + '"]')
+                        });
+                    }
+                });
+            }
+            if (err_b) return false;
         }
 
 
@@ -144,11 +204,7 @@ function jsubmitform(forms, params) {
                     showerr(form.find('#jsf_error'), o_data.error);
                 }
             } catch (e) {
-                // error_data
-                callf(params.error_data, {form: form, dataout: obj.dataout, datain: o_data});
-
-                // debug
-                console.log('debug - incorrect data');
+                showerr(form.find('#jsf_error'), 'incorrect data');
             }
         }
 
@@ -159,17 +215,6 @@ function jsubmitform(forms, params) {
                 return f(p);
             }
             return true;
-        }
-
-
-        // show animate
-        function showani() {
-            if (params.animate) {
-                showel(form.find('#jsf_animate'), '<div id="facebookG">' +
-                    '<div id="blockG_1" class="facebook_blockG"></div>' +
-                    '<div id="blockG_2" class="facebook_blockG"></div>' +
-                    '<div id="blockG_3" class="facebook_blockG"></div></div>');
-            }
         }
 
 
@@ -225,9 +270,6 @@ function jsubmitform(forms, params) {
             if (typeof(params.luck) != "boolean") {
                 params.luck = true;
             }
-            if (typeof(params.animate) != "boolean") {
-                params.animate = true;
-            }
             if (typeof(params.handle) != "boolean") {
                 params.handle = false;
             }
@@ -245,25 +287,10 @@ function jsubmitform(forms, params) {
          Source:    http://css-tricks.com/snippets/jquery/serialize-form-to-json/
          Using:     $('form').serializeObject();
          Return:    (object) { name: 'Alex', gender: 'm' }
-
-         *my extanded value of file
          */
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
-
-            // "Data from file select elements is not serialized."
-            form.find('input[type="file"]').each(function () {
-                if ($(this).get(0).files.length > 0) {
-                    var b = [];
-
-                    $.each($(this).get(0).files, function () {
-                        b.push(this.name);
-                    });
-
-                    a.push({ name: $(this).prop('name'), value: b });
-                }
-            });
 
             $.each(a, function () {
                 if (o[this.name]) {
@@ -277,119 +304,6 @@ function jsubmitform(forms, params) {
             });
             return o;
         };
-
-
-        // convert object to string (custom serialize)
-        // reason: "Data from file select elements is not serialized."
-        function obj2str(obj) {
-            var str = "";
-            $.each(obj, function (index, value) {
-                str += index + '=' + value + '&';
-            });
-            return str.replace(/&$/, '');
-        };
-
-
-        // necessary fields
-        function necessary(dataout) {
-
-            var err_b = false;
-            form.find('[jsf_necessary]').each(function () {
-
-                // if not filled in the required fields, or not valid
-                if (!dataout[$(this).prop('name')]) {
-
-                    // error
-                    showerr(form.find('#jsf_error'), $(this).attr("jsf_necessary"));
-
-                    callf(params.error_field, {form: form, dataout: dataout, field: $(this)});
-
-                    err_b = true;
-                    return false;
-                }
-
-                callf(params.success_field, {form: form, dataout: dataout, field: $(this)});
-            });
-            if (err_b) return false;
-        }
-
-
-        // find key in first object not exist in second object
-        function key2find(obj1, obj2) {
-            var b = false;
-            $.each(obj1, function (index1, value1) {
-                $.each(obj2, function (index2, value2) {
-                    if (index1 == index2) {
-                        b = index1;
-                        return true;
-                    }
-                });
-                if (b) return true;
-            });
-            return b;
-        }
-
-
-        // validate fields
-        function validate(dataout) {
-            var err_b = false;
-
-            if (typeof(params.validate) === 'object') {
-                /*
-                 value - object: field, required, msg and <function>
-                 */
-                $.each(params.validate, function (index, value) {
-                    if (typeof(value) === 'object') {
-
-                        // if required OR val
-                        if (value.required == true || dataout[value.field]) {
-
-                            // if exist name of function
-                            var validfunc = key2find(value, valid_actions);
-
-                            if (validfunc) {
-
-                                // call validation function
-                                if (valid_actions[validfund]({
-                                    value: dataout[value.field], test: value[validfunc]
-                                }) === false) {
-
-                                    // error
-                                    showerr(form.find('#jsf_error'), value.msg);
-
-                                    callf(params.error_field, {
-                                        form: form,
-                                        dataout: dataout,
-                                        field: form.find('[name="' + value.field + '"]')
-                                    });
-
-                                    err_b = true;
-                                    return false;
-                                }
-
-                                if (err_b) return false;
-
-                            } else if (!dataout[value.field]) {
-                                // error
-                                showerr(form.find('#jsf_error'), value.msg);
-
-                                callf(params.error_field, {
-                                    form: form, dataout: dataout, field: form.find('[name="' + value.field + '"]')
-                                });
-
-                                err_b = true;
-                                return false;
-                            }
-
-                        }
-                        callf(params.success_field, {
-                            form: form, dataout: dataout, field: form.find('[name="' + value.field + '"]')
-                        });
-                    }
-                });
-            }
-            if (err_b) return false;
-        }
 
 
         // !!! validation functions !!!
