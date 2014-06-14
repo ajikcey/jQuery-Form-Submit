@@ -83,7 +83,7 @@
 	<input type="submit" value="Сохранить"/>
 
 	<span id="jsf_error"></span>
-	<span id="jsf_luck"></span>
+	<span id="jsf_success"></span>
 </form>
 
 <script>
@@ -106,15 +106,28 @@
 					name: 'maxlength',
 					arg: 8,
 					msg: "Text должен быть максимум 8 символа"
+				}
+			],
+			"checkbox[]": [
+				{
+					name: 'minlength',
+					arg: 1,
+					msg: "Введите textarea"
 				},
-			]
+				{
+					name: 'minlength',
+					arg: 4,
+					msg: "textarea должен быть минимум 4 символа"
+				},
+				{
+					name: 'maxlength',
+					arg: 8,
+					msg: "textarea должен быть максимум 8 символа"
+				}
+			],
 		},
 		success: function (obj) {
 			//console.log('success');
-			//console.log(obj);
-		},
-		noresponse: function (obj) {
-			//console.log('noresponse');
 			//console.log(obj);
 		},
 		before: function (obj) {
@@ -129,27 +142,17 @@
 			//console.log('after');
 			//console.log(obj);
 		},
-		incorrect_data: function (obj) {
-			//console.log('incorrect_data');
-			//console.log(obj);
-		},
-		correct_data: function (obj) {
-			//console.log('correct_data');
-			//console.log(obj);
-		},
-		error_data: function (obj) {
-			//console.log('error_data');
-			//console.log(obj);
-		},
-		success_field: function (obj) {
-			//console.log('success_field');
-			//console.log(obj);
-			obj.field.css('background', 'green');
-		},
-		error_field: function (obj) {
-			//console.log('error_field');
-			//console.log(obj);
-			obj.field.css('background', 'red');
+		error: function (obj) {
+			//console.log('getfields');
+			console.log(obj);
+
+			$.each(obj.error_fields, function (index, value) {
+				this.field.css('background', 'red');
+			});
+
+			$.each(obj.success_fields, function (index, value) {
+				this.field.css('background', 'green');
+			});
 		},
 	});
 </script>
