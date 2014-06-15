@@ -322,7 +322,7 @@ function jsubmitform(forms, params) {
                 }
             });
             return o;
-        };
+        }
 
 
         // !!! validation functions !!!
